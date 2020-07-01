@@ -11,12 +11,14 @@
 <head>
     <title>Google Calendar API Quickstart</title>
     <meta charset="utf-8" />
+
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-    <p>Google Calendar Event Creater V4</p>
+    <p>Google Calendar Event Creater V4.1</p>
 
     <!--Add buttons to initiate auth sequence and sign out-->
     <div>
@@ -49,6 +51,15 @@
             <div class="form-group">
                 <label for="custDescription">Description of Problem</label>
                 <textarea class="form-control" id="custDescription" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="cCalendarType">Your Calendar</label>
+                <select class="form-control" id="cCalendarType">
+                    <option>Google Calendar</option>
+                    <option>Outlook Calendar</option>
+                    <option>Apple Calendar (iCal)</option>
+                </select>
             </div>
 
             <button type="button" id="FormSubmitButton" class="btn btn-dark">Submit</button>
