@@ -1,0 +1,222 @@
+<!-- 
+
+    BEFORE TRYING, do:
+        python -m SimpleHTTPServer 8000
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Google Calendar API Quickstart</title>
+    <meta charset="utf-8" />
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <p>Google Calendar Event Creater V4.1</p>
+
+    <!--Add buttons to initiate auth sequence and sign out-->
+    <div>
+        <div>
+            <button id="authorize_button" class="btn btn-primary" style="display: none;">Authorize</button>
+            <button id="signout_button" class="btn btn-secondary" style="display: none;">Sign Out</button>
+        
+            <pre id="content" style="white-space: pre-wrap;"></pre>
+        </div>
+
+
+        <!-- Test form to get data for call -->
+        <form id="customerForm">
+            <div class="form-group">
+                <label for="custName">Full Name</label>
+                <input type="text" class="form-control" id="custName">
+            </div>
+            <div class="form-group">
+                <label for="custStartTime">Start Time (HH) [MILL TIME]</label>
+                <input type="text" class="form-control" id="custStartTime">
+            </div>
+            <div class="form-group">
+                <label for="custCallDate">Call Date (YYYY-MM-DD)</label>
+                <input type="text" class="form-control" id="custCallDate">
+            </div>
+            <div class="form-group">
+                <label for="custEmail">Email Address</label>
+                <input type="email" class="form-control" id="custEmail">
+            </div>
+            <div class="form-group">
+                <label for="custDescription">Description of Problem</label>
+                <textarea class="form-control" id="custDescription" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="cCalendarType">Your Calendar</label>
+                <select class="form-control" id="cCalendarType">
+                    <option>Google Calendar</option>
+                    <option>Outlook Calendar</option>
+                    <option>Apple Calendar (iCal)</option>
+                </select>
+            </div>
+
+            <button type="button" id="FormSubmitButton" class="btn btn-dark">Submit</button>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        // Client ID and API key from the Developer Console
+        var CLIENT_ID = '632479225021-5dnoeg1eelvqnmlu71r8i1ir9l4967bo.apps.googleusercontent.com';
+        var API_KEY = 'AIzaSyC1xE9V1lAjR2ULh9uzWFD4Euq2eB_ChAo';
+
+        // Array of API discovery doc URLs for APIs used by the quickstart
+        var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+
+        // Authorization scopes required by the API; multiple scopes can be
+        // included, separated by spaces.
+        var SCOPES = "https://www.googleapis.com/auth/calendar";
+
+        var authorizeButton = document.getElementById('authorize_button');
+        var signoutButton = document.getElementById('signout_button');
+        var customerForm = document.getElementById('customerForm');
+        var formSubmitButton = document.getElementById('FormSubmitButton');
+
+        /**
+         *  On load, called to load the auth2 library and API client library.
+         */
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        /**
+         *  Initializes the API client library and sets up sign-in state
+         *  listeners.
+         */
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES
+            }).then(function () {
+                // Listen for sign-in state changes.
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+                // Handle the initial sign-in state.
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                authorizeButton.onclick = handleAuthClick;
+                signoutButton.onclick = handleSignoutClick;
+                formSubmitButton.onclick = createEvent;
+            }, function (error) {
+                appendPre(JSON.stringify(error, null, 2));
+            });
+        }
+
+        /**
+         *  Called when the signed in status changes, to update the UI
+         *  appropriately. After a sign-in, the API is called.
+         */
+        function updateSigninStatus(isSignedIn) {
+            if (isSignedIn) {
+                authorizeButton.style.display = 'none';
+                signoutButton.style.display = 'block';
+                customerForm.style.display = 'block';
+
+            } else {
+                authorizeButton.style.display = 'block';
+                signoutButton.style.display = 'none';
+                customerForm.style.display = 'none';
+            }
+        }
+
+        function createEvent(isSignedIn){
+
+            console.log('into function: createEvent');
+
+            //create event from form input 
+
+            var event = {
+                'summary': document.getElementById('custName').value + ' - Virtual Plumber Call',   //customer name
+                'location': 'Virtualplumber',   //place holder for probably the link we want to send it 
+                'description': document.getElementById('custDescription').value, //customer's description of problem
+                'start': {
+                    'dateTime': document.getElementById('custCallDate').value + 'T' + document.getElementById('custStartTime').value + ':00:00-04:00', //customer able to specify time in Eastern Time Zone, and date (any)
+                    'timeZone': 'America/New_York'
+                },
+                'end': {
+                    'dateTime': document.getElementById('custCallDate').value + 'T'  + document.getElementById('custStartTime').value + ':45:00-04:00', //calendar event ends 45 minutes later same day, establishing a 45 minute window
+                    'timeZone': 'America/New_York'
+                },
+                'attendees': [
+                    { 'email': 'danielk@ecoplumbers.com' }, //what we probably want to do is set these to the customer's email and the virutal plumber email so we get emailed a reminder the day before
+                    { 'email': 'elliot@ecoplumbers.com' }
+                ],
+                'reminders': {
+                    'useDefault': false,
+                    'overrides': [
+                        { 'method': 'email', 'minutes': 24 * 60 },
+                        { 'method': 'popup', 'minutes': 10 }
+                    ]
+                }
+            };
+
+            console.log('initial event created:' + event);
+
+            if(isSignedIn){
+                console.log('pass: Sign-in Check');
+
+                request(event);
+
+            }
+
+            return;
+        }
+
+        /**
+         *  Sign in the user upon button click.
+         */
+        function handleAuthClick(event) {
+            gapi.auth2.getAuthInstance().signIn();
+        }
+
+        /**
+         *  Sign out the user upon button click.
+         */
+        function handleSignoutClick(event) {
+            gapi.auth2.getAuthInstance().signOut();
+        }
+
+        /**
+         * Append a pre element to the body containing the given message
+         * as its text node. Used to display the results of the API call.
+         *
+         * @param {string} message Text to be placed in pre element.
+         */
+        function appendPre(message) {
+            var pre = document.getElementById('content');
+            var textContent = document.createTextNode(message + '\n');
+            pre.appendChild(textContent);
+        }
+
+        // CRITICAL, pushes the event to the signed-in user's calendar
+        function request(event) {
+            var a = gapi.client.calendar.events.insert({
+                'calendarId': 'ecoplumbers.com_k17jchdd99364t45ejv3tigrd8@group.calendar.google.com', //change value to 'primary' on push to production testing
+                'resource': event
+            });
+
+            a.execute(function (event) {
+                console.log('Event created: ' + event.htmlLink); //at this point, probably can push a pop-up or email with the event.htmlLink to notify customer of successful creation.
+            });
+        }
+
+    </script>
+
+    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
+</body>
+
+</html>
