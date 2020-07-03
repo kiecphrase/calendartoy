@@ -4,11 +4,11 @@ const { writeFileSync } = require('fs')
 
 
 $("#FormSubmitButton").on("click", function() {
-    console.log("Start data cleaning ;_;");
+    console.log("Start data cleaning");
     c_data = data_clean();
-    console.log("End data cleaning ^-^");
+    console.log("End data cleaning");
 
-    console.log("Start isc creation :O");
+    console.log("Start isc creation");
 
     ics.createEvent({
         title: c_data["name"] + "'s Virtual Plumber Meeting",
@@ -28,7 +28,7 @@ $("#FormSubmitButton").on("click", function() {
         writeFileSync(`${__dirname}/vpcall.ics`,value)
     });
 
-    console.log("End isc creation, file created ^-^");
+    console.log("End isc creation, file created");
 });
 
 // data grab function
