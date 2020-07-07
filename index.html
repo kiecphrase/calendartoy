@@ -13,12 +13,60 @@
 
 	</head>
 	<body>
-		<div class="wrap">
+
+		<!-- DEMO to base off of -->
+		<!-- <div class="wrap">
 			<a href="#" onclick="javascript:cal_single.download('Awesome Day')">Single Event</a>
 			<br>
 			<a href="#" onclick="javascript:cal.download('Holidays')">Multiple Events</a>
 			<br>
 			<a href="#" onclick="javascript:makelogs(cal)">Console Output</a>
+		</div> -->
+
+		<div class="holder-main">
+		
+			<div class="holder-alt">
+				<h1>Calendar toy V6.0</h1>
+				<br>
+				<p>This version utilizes the ics format and (hopefully) automatic app integration to get around needing to distinguish between calendar types.</p>
+				<small>Big ups to Travis Krause.</small>
+				<br>
+				<br>
+			</div>
+		
+			<div class="holder">
+				<form id="customerForm">
+					<div class="form-group">
+						<label for="custName">Full Name</label>
+						<input type="text" class="form-control" id="custName">
+					</div>
+					<div class="form-group">
+						<label for="custStartTime">Start Time (example: 5:30)</label>
+						<input type="text" class="form-control" id="custStartTime">
+
+						<select class="form-control" id="custTimeAMPM">
+							<option>am</option>
+							<option>pm</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="custCallDate">Call Date (example: 10/3/2020)</label>
+						<input type="text" class="form-control" id="custCallDate">
+					</div>
+					<div class="form-group">
+						<label for="custEmail">Email Address</label>
+						<input type="email" class="form-control" id="custEmail">
+					</div>
+					<div class="form-group">
+						<label for="custDescription">Description of Problem</label>
+						<textarea class="form-control" id="custDescription" rows="3"></textarea>
+					</div>
+		
+					<div class="holder-alt">
+						<button type="button" id="FormSubmitButton" class="btn btn-lg btn-dark">Submit</button>
+					</div>
+				</form>
+			</div>
 		</div>
 
 
