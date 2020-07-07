@@ -46,7 +46,7 @@ $("#FormSubmitButton").on("click", function () {
 
     c_event.addEvent(c_data["name"], c_data["description"], 'Columbus, OH', start, end);
     
-    console.log("+ + + + + + + + + + +" + "/n" + "        Event        " + "/n" + c_event.calendar() + "+ + + + + + + + + + +");
+    console.log("+ + + + + + + + + + +" + "\n" + "        Event        " + "\n" + " " + "\n" + c_event.calendar() + "\n" + " " + "\n" + "+ + + + + + + + + + +");
     //console.log("        Event        ");
     //console.log(c_event.calendar());
     //console.log("+ + + + + + + + + + +");
