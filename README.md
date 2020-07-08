@@ -10,5 +10,6 @@ JS works really well on mobile. Download ics can be opened in google calendar an
 ## TODO:
 
 - [X] Work on integrating form values to create ics
-- [ ] Make sure licensing is correct
+- [X] Make sure licensing is correct
 - [ ] Get quick action / streamline process on non-mobile system
+- [ ] HTML Google calendar system for desktop systems
