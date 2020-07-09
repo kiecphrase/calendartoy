@@ -1,11 +1,13 @@
 # calendar_toy
 
-## V 6.3
+## V 6.4
 
 ~~working on integration of ics generator with older versions of the toy to create~~
 ~~strong base for the future.~~ 
 
 JS works really well on mobile. Download ics can be opened in google calendar and outlook (iCal unconfirmed but VERY LIKELY)
+
+Close to getting the google url to work.
 
 ## TODO:
 

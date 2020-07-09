@@ -5,7 +5,9 @@ var ics=function(e,t){"use strict";{if(!(navigator.userAgent.indexOf("MSIE")>-1&
 
 /* FUNCTIONS */
 
-//main function
+/* MOBILE */
+
+//main function 
 $("#FormSubmitButton").on("click", function () {
     console.log("Start data collection");
     c_data = data_snag();
@@ -75,11 +77,122 @@ function end_time(time){
         }
     }
 
+    if(m < 10){
+        m = "0" + m;
+    }
+
     return(h + ":" + m + " " + ap);
-}
+};
 
 // Eventaully get the Virtual Plumber call and put it in here
 function get_VPCall() {
 
-    return ("  This eventually is a virtual plumber call url :/ ");
+    return ("This+eventually+is+a+virtual+plumber+call+url");
+};
+
+
+// ##########################################################################################################
+
+/* Desktop Functions */
+
+$("#genGoogleURL").on("click", function () {
+
+    $("#useURL").attr("class", "btn btn-warning");
+    $("#useURL").attr("href", "#");
+
+    console.log("Start data collection");
+    c_data = data_snag();
+    console.log("End data collection");
+
+    console.log("Start building URL");
+
+    var url = url_build(c_data);
+
+    console.log("End building URL");
+
+    $("#useURL").attr("class", "btn btn-success");
+    $("#useURL").attr("href", url);
+    console.log("Your URL is ready!");
+
+    return;
+
+});
+
+function url_build(d) {
+
+    // SET UP
+    var url = "https://calendar.google.com/calendar/r/eventedit?";
+    
+    // GENERATE TITLE
+    var holder = d["name"].split(" ");
+    var title = "text=";
+
+    console.log("currently in holder: " + holder);
+
+    for(i = 0; i < holder.length; i++){
+        if (i == (holder.length - 1)){
+            title = title + holder[i];
+        }
+        else{
+            title = title + holder[i] + "+";
+        }
+    }
+
+    // GENERATE TIME
+    holder = [d["date"], d["startTime"], d["endTime"]];
+    var subHolder = [];
+    var subSubHolder = "";
+    var timeChunk = "";
+    var time = "&dates=";
+
+    console.log("currently in holder: " + holder);
+
+    for(i=1;i<holder.length;i++){
+
+        timeChunk = "";
+
+        // Date
+        subHolder = holder[0].split("/");
+
+        if(parseInt(subHolder[0]) < 10){
+            subHolder[0] = "0" + parseInt(subHolder[0]);
+        }
+        if (parseInt(subHolder[1]) < 10) {
+            subHolder[1] = "0" + parseInt(subHolder[1]);
+        }
+
+        timeChunk = timeChunk + subHolder[2] + subHolder[0] + subHolder[1] + "T";
+
+        // Time
+        subHolder = holder[i].split(" ");
+        subSubHolder = subHolder[0].split(":");
+
+        if(subSubHolder[1] == "pm"){
+            timeChunk = timeChunk + (parseInt(subSubHolder[0]) + 12) + subSubHolder[1] + "00";
+        } else {
+            timeChunk = timeChunk + parseInt(subSubHolder[0]) + subSubHolder[1] + "00";
+        }
+
+        if(i == 1){
+            time = time + timeChunk + "Z/";
+        }
+        else {
+            time = time + timeChunk + "Z";
+        }
+    }
+
+    console.log("time: " + time);
+
+    // GENERATE DETAILS
+
+    holder = get_VPCall();
+    var details = "&details=Your+Virtualplumber+call+can+be+found+here:+"+holder;
+
+    // GENERATE LOCATION
+    var location = "&location=The+Ecoplumbers+-+4691+Northwest+Parkway+-+Hillard+OH+43036"
+
+    // BUILD URL
+    url = url + title + time + details + location;
+    console.log("generated url: " + url);
+    return(url);
 };
