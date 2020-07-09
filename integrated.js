@@ -46,9 +46,6 @@ function data_snag() {
 
     var c_data = { "name": name, "email": email, "description": desc, "date": date, "startTime": startTime, "endTime": endTime};
 
-
-    console.log("data_snag function result: " + c_data["name"] + " says: \n" + c_data["description"] /* fix date */);
-
     return (c_data);
 };
 
@@ -131,7 +128,7 @@ function url_build(d) {
 
     for(i = 0; i < holder.length; i++){
         if (i == (holder.length - 1)){
-            title = title + holder[i];
+            title = title + holder[i] + "'s+Virtualplumber+Call";
         }
         else{
             title = title + holder[i] + "+";
@@ -167,21 +164,19 @@ function url_build(d) {
         subHolder = holder[i].split(" ");
         subSubHolder = subHolder[0].split(":");
 
-        if(subSubHolder[1] == "pm"){
+        if(subHolder[1].charAt(0) == 'p'){
             timeChunk = timeChunk + (parseInt(subSubHolder[0]) + 12) + subSubHolder[1] + "00";
         } else {
             timeChunk = timeChunk + parseInt(subSubHolder[0]) + subSubHolder[1] + "00";
         }
 
         if(i == 1){
-            time = time + timeChunk + "Z/";
+            time = time + timeChunk + "/";
         }
         else {
-            time = time + timeChunk + "Z";
+            time = time + timeChunk;
         }
     }
-
-    console.log("time: " + time);
 
     // GENERATE DETAILS
 
